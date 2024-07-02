@@ -1,0 +1,112 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import pandas as pd
+
+# Sample dataset
+data = {
+    'query': [
+        'What is the weather today?',
+        'Set a reminder for 5 PM',
+        'Tell me a joke',
+        'How far is the moon from Earth?',
+        'Find a restaurant nearby',
+        'Play some music'
+    ],
+    'intent': [
+        'weather',
+        'reminder',
+        'joke',
+        'space',
+        'location',
+        'music'
+    ]
+}
+
+# Create a DataFrame
+df = pd.DataFrame(data)
+print(df)
+
+
+# In[2]:
+
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Initialize TF-IDF Vectorizer
+vectorizer = TfidfVectorizer()
+
+# Fit and transform the data
+X = vectorizer.fit_transform(df['query'])
+y = df['intent']
+
+
+# In[3]:
+
+
+from sklearn.linear_model import LogisticRegression
+
+# Initialize the model
+model = LogisticRegression()
+
+# Train the model
+model.fit(X, y)
+
+
+# In[4]:
+
+
+def predict_intent(user_query):
+    # Transform user input using the same vectorizer
+    query_vec = vectorizer.transform([user_query])
+    
+    # Predict intent
+    intent = model.predict(query_vec)[0]
+    
+    return intent
+
+
+# In[5]:
+
+
+# Test the virtual assistant
+queries = [
+    "What's the weather like tomorrow?",
+    "Remind me to call John at 3 PM",
+    "Tell me something funny",
+    "How long does it take to get to Mars?",
+    "Show me a good pizza place nearby",
+    "Play my favorite song"
+]
+
+for query in queries:
+    intent = predict_intent(query)
+    print(f"Query: '{query}' --> Intent: '{intent}'")
+
+
+# In[6]:
+
+
+# Test the virtual assistant
+queries = [
+    "What's the weather like tomorrow?",
+    "Remind me to call John at 3 PM",
+    "Tell me something funny",
+    "How long does it take to get to Mars?",
+    "Show me a good pizza place nearby",
+    "Play my favorite song"
+]
+
+for query in queries:
+    intent = predict_intent(query)
+    print(f"Query: '{query}' --> Intent: '{intent}'")
+
+
+# In[ ]:
+
+
+
+
